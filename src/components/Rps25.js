@@ -11,6 +11,8 @@ const choices = {
     rps25: require('../choices/rps25.json')
 };
 
+const emojis = require('../emojis.json');
+
 const outcomes = require('../outcomes.json');
 
 class Rps25 extends ComponentReceiver {
@@ -79,11 +81,10 @@ class Rps25 extends ComponentReceiver {
             const choice1 = values[0];
             const choice2 = values[1];
             const win1 = outcomes[choice1].includes(choice2);
-            const win2 = outcomes[choice2].includes(choice1);
 
-            description = `Game has ended!\n\n**${users[0].tag}**: \`${choice1}\`\n\n**${users[1].tag}**: \`${choice2}\`\n\n`;
+            description = `Game has ended!\n\n**${users[0].tag}**: ${emojis[choice1]} \`${choice1}\`\n\n**${users[1].tag}**: ${emojis[choice2]} \`${choice2}\`\n\n`;
 
-            if (win1 && win2) {
+            if (choice1 === choice2) {
                 description = description + "It's a tie!";
             } else if (win1) {
                 description = description + `${users[0]} wins!`;
@@ -92,7 +93,7 @@ class Rps25 extends ComponentReceiver {
             }
         } else {
             this.users.forEach(user => {
-                const hasSelected = this.selectedMoves.has(user);
+                const hasSelected = this.selectedMoves.has(user.id);
                 description =
                     description +
                     (hasSelected
@@ -119,7 +120,8 @@ class Rps25 extends ComponentReceiver {
                     return {
                         label: c.toUpperCase(),
                         value: c,
-                        description: outcomes[c].filter(c => this.choices.includes(c)).join(' • ')
+                        description: outcomes[c].filter(c => this.choices.includes(c)).join(' • '),
+                        emoji: emojis[c]
                     };
                 })
             );
