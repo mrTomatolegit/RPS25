@@ -2,6 +2,8 @@
 
 RPS25 is a Rock Paper Scissors game based on the [RPS25 newgrounds game](https://www.newgrounds.com/portal/view/319609)
 
+[Invite link](https://discord.com/api/oauth2/authorize?client_id=885250908651413565&scope=applications.commands)
+
 ## Commands
 
 `/rps [gamemode] [opponent]` - Play RPS against someone or against the bot!
