@@ -73,13 +73,12 @@ class Rps25 extends ComponentReceiver {
     makeEmbed() {
         let description = 'Select a choice from the dropdown menu:\n\n';
         const users = [...this.users.values()];
-        const values = [...this.selectedMoves.values()];
 
         if (this.isFinished) {
             this.stop();
 
-            const choice1 = values[0];
-            const choice2 = values[1];
+            const choice1 = this.selectedMoves.get(users[0].id);
+            const choice2 = this.selectedMoves.get(users[1].id);
             const win1 = outcomes[choice1].includes(choice2);
 
             description = `Game has ended!\n\n**${users[0].tag}**: ${emojis[choice1]} \`${choice1}\`\n\n**${users[1].tag}**: ${emojis[choice2]} \`${choice2}\`\n\n`;
