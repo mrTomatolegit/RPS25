@@ -1,3 +1,5 @@
+const Invite = require('../components/Invite');
+
 /**
  * @type {import('discord.js').ApplicationCommandData}
  */
@@ -9,11 +11,6 @@ module.exports = {
      * @param {import("discord.js").CommandInteraction} i
      */
     run: async (client, i) => {
-        i.reply({
-            content: `[Invite link](${client.generateInvite({
-                scopes: ['applications.commands', 'bot']
-            })})`,
-            ephemeral: true
-        });
+        i.reply(new Invite(client).toJSON());
     }
 };
