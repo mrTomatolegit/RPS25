@@ -11,7 +11,7 @@ module.exports = {
     run: async (client, i) => {
         i.reply({
             content: `[Invite link](${client.generateInvite({
-                scopes: ['applications.commands']
+                scopes: ['applications.commands', 'bot']
             })})`,
             ephemeral: true
         });
