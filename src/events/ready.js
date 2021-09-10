@@ -15,15 +15,15 @@ module.exports = client => {
                 description: c.description
             })
     );
-    client.application.commands
-        .set(
-            client.commands.map(
-                c =>
-                    new ApplicationCommand(client, {
-                        name: c.name,
-                        description: c.description,
-                        options: c.options,
-                    })
-            )
-        );
+    client.application.commands.set(
+        client.commands.map(
+            c =>
+                new ApplicationCommand(client, {
+                    name: c.name,
+                    description: c.description,
+                    options: c.options
+                })
+        ),
+        process.isTesting ? client.config.guildId : undefined
+    );
 };

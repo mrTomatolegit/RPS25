@@ -2,8 +2,11 @@
 require('dotenv').config();
 const { Client, Collection } = require('discord.js');
 const fs = require('fs');
+process.isTesting = process.argv.includes('--testing');
 
-const client = new Client({ intents: ['GUILD_INTEGRATIONS', 'GUILDS'] });
+const client = new Client({ intents: ['GUILD_INTEGRATIONS'] });
+
+client.config = require('./config.json');
 
 client.commands = new Collection();
 
