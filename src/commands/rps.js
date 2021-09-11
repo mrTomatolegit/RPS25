@@ -40,5 +40,12 @@ module.exports = {
             i.options.getString('gamemode', false) || 'rps25'
         );
         i.reply(rps.toJSON());
+
+        rps.on('end', () => {
+            i.editReply(Rps25.disableAllComponents(rps.toJSON()));
+        });
+        rps.on('timeout', () => {
+            i.editReply(Rps25.disableAllComponents(rps.toJSON()));
+        });
     }
 };

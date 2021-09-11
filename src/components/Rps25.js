@@ -24,8 +24,7 @@ class Rps25 extends ComponentReceiver {
      */
     constructor(client, channelId, users, gamemode = 'rps25') {
         super(client, channelId, users, {
-            idle: 30000,
-            time: 120000
+            idle: 40000
         });
 
         this.gamemode = gamemode;
@@ -48,6 +47,11 @@ class Rps25 extends ComponentReceiver {
 
             i.update(this.toJSON());
         });
+
+        this.on(this.rematchId, i => {
+            this.selectedMoves.clear();
+            i.update(this.toJSON());
+        });
     }
 
     get choices() {
@@ -62,6 +66,7 @@ class Rps25 extends ComponentReceiver {
         const base = [];
         if (!this.isFinished)
             base.push(new MessageActionRow().addComponents(this.makeSelectChoice()));
+        else base.push(new MessageActionRow().addComponents(this.makeRematch()));
 
         return base;
     }
@@ -69,14 +74,15 @@ class Rps25 extends ComponentReceiver {
     get selectChoiceId() {
         return `selectchoice${this.uniqueKey}`;
     }
+    get rematchId() {
+        return `rematch${this.uniqueKey}`;
+    }
 
     makeEmbed() {
         let description = 'Select a choice from the dropdown menu:\n\n';
         const users = [...this.users.values()];
 
         if (this.isFinished) {
-            this.stop();
-
             const choice1 = this.selectedMoves.get(users[0].id);
             const choice2 = this.selectedMoves.get(users[1].id);
             const win1 = outcomes[choice1].includes(choice2);
@@ -124,6 +130,10 @@ class Rps25 extends ComponentReceiver {
                     };
                 })
             );
+    }
+
+    makeRematch() {
+        return this.createButton(this.rematchId).setStyle('SECONDARY').setLabel('Rematch');
     }
 
     toJSON() {
