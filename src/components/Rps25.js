@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow } = require('discord.js');
+const { MessageEmbed, MessageActionRow, Collection } = require('discord.js');
 const ComponentReceiver = require('./ComponentReceiver');
 
 const choices = {
@@ -30,6 +30,8 @@ class Rps25 extends ComponentReceiver {
         this.gamemode = gamemode;
 
         this.embedColor = null;
+
+        this.winCount = new Collection(this.users.map(u => [u.id, 0]));
 
         this.selectedMoves = new Map();
 
@@ -90,11 +92,13 @@ class Rps25 extends ComponentReceiver {
             description = `Game has ended!\n\n**${users[0].tag}**: ${emojis[choice1]} \`${choice1}\`\n\n**${users[1].tag}**: ${emojis[choice2]} \`${choice2}\`\n\n`;
 
             if (choice1 === choice2) {
-                description = description + "It's a tie!";
+                description += "It's a tie!";
             } else if (win1) {
-                description = description + `${users[0]} wins!`;
+                this.winCount.set(users[0].id, this.winCount.get(users[0].id) + 1);
+                description += `${users[0]} wins!`;
             } else {
-                description = description + `${users[1]} wins!`;
+                this.winCount.set(users[1].id, this.winCount.get(users[1].id) + 1);
+                description += `${users[1]} wins!`;
             }
         } else {
             this.users.forEach(user => {
@@ -113,6 +117,12 @@ class Rps25 extends ComponentReceiver {
             .setColor(this.embedColor ?? 'RANDOM')
             .setTimestamp()
             .setFooter('Game ID: ' + this.uniqueKey);
+
+        if (this.winCount.filter(n => n > 0).size > 0)
+            embed.setFooter(
+                this.users.map(u => `${u.tag}: ${this.winCount.get(u.id)}`).join(' • ')
+            );
+
         this.embedColor = embed.color;
         return embed;
     }
