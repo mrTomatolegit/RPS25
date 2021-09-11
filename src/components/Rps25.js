@@ -36,6 +36,7 @@ class Rps25 extends ComponentReceiver {
         this.selectedMoves = new Map();
 
         this.on(this.selectChoiceId, i => {
+            if (this.isFinished) return;
             if (this.selectedMoves.has(i.user.id)) return i.deferUpdate();
             this.selectedMoves.set(i.user.id, i.values[0]);
 
@@ -51,6 +52,7 @@ class Rps25 extends ComponentReceiver {
         });
 
         this.on(this.rematchId, i => {
+            if (!this.isFinished) return;
             this.selectedMoves.clear();
             i.update(this.toJSON());
         });
