@@ -67,7 +67,7 @@ class ComponentReceiver extends EventEmitter {
         const baseOptions = {
             filter: i =>
                 this.users.has(i.user.id) &&
-                i.customId.includes(this.uniqueKey) &&
+                i.customId?.includes(this.uniqueKey) &&
                 i.channelId === this.channelId &&
                 ('filter' in options ? options.filter(i) : true)
         };
