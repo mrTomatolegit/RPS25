@@ -8,13 +8,6 @@ const { ApplicationCommand } = require('discord.js');
 module.exports = client => {
     console.log(`Logged in as ${client.user.tag}`);
 
-    client.commands.map(
-        c =>
-            new ApplicationCommand(client, {
-                name: c.name,
-                description: c.description
-            })
-    );
     client.application.commands.set(
         client.commands.map(
             c =>
